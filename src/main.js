@@ -5,7 +5,7 @@ const USERNAME = "peloton_username";
 const PASSWORD = "peloton_password";
 const PELOTON_SESSION_ID = "peloton_session_id";
 const PELOTON_USER_ID = "peloton_user_id";
-const FETCH_STRATEGY = "ALL"; // choose one between "ALL" or "DELTAS";
+const FETCH_STRATEGY = "LAST_5"; // choose one between "ALL", "DELTAS" or "LAST_5";
 
 async function main() {
   try {
@@ -21,7 +21,13 @@ async function main() {
           const workoutCount = workoutSheet.getLastRow();
           parsedData.splice(0, workoutCount);
           break;
+        case "LAST_5":
+          workoutSheet.deleteRows(workoutSheet.getLastRow() -4, 5);
+          const newLastRow = workoutSheet.getLastRow();
+          parsedData.splice(0, newLastRow);
+          break;
         default:
+          break;
       }
       parsedData.forEach((row) => workoutSheet.appendRow(row));
     }
