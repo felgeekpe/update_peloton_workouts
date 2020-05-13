@@ -29,10 +29,27 @@ async function main() {
         default:
           break;
       }
+      parsedData.map(parseRowData)
       parsedData.forEach((row) => workoutSheet.appendRow(row));
     }
   } catch (e) {
     console.error(e);
+  }
+}
+
+function parseRowData(rowData, index) {
+  if(index === 0) return rowData; 
+  rowData[0] = parseDateTimeString(rowData[0])
+  rowData[7] = parseDateTimeString(rowData[7])
+  return rowData;
+}
+
+function parseDateTimeString(data) {
+  const output = new Date(data)
+  if(!isNaN(output.valueOf())) {
+    return output;
+  } else {
+    throw new Error('Not a valid date-time');
   }
 }
 
